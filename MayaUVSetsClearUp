@@ -1,0 +1,17 @@
+import maya.cmds as cmds
+
+selectOBJs=cmds.ls(sl=True)
+for obj in selectOBJs:
+    cmds.select(obj)
+
+    uvList=cmds.polyUVSet(q=True,allUVSets=True)
+    if "map1" not in uvList:
+        cmds.polyUVSet(rename=True, uvSet=uvList[0], newUVSet="map1")
+    else:
+        if uvList[0]!="map1":
+            cmds.polyUVSet(copy=True, uvSet="map1",nuv=uvList[0])
+            cmds.polyUVSet(delete=True,uvSet="map1")
+            cmds.polyUVSet(rename=True, uvSet=uvList[0], newUVSet="map1")
+    newUVList = cmds.polyUVSet(q=True, allUVSets=True)
+    for i in range(1, len(newUVList)):
+        cmds.polyUVSet(delete=True, uvSet=newUVList[i])
